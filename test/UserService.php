@@ -1,89 +1,76 @@
 <?php
 
 
-class firstClass
+class userService
 {
+    public function __construct()
+    {
+
+        $this->con = new mysqli("localhost", "root", "", "bd");
+    }
+
     public function viewDB()
     {
-        $conn = new mysqli("localhost", "root", "", "bd");
-
-        if($conn->connect_error){
-            die("Ошибка: " . $conn->connect_error);
+        if ($this->con->connect_error) {
+            die("Ошибка: " . $this->con->connect_error);
         }
+
+        $result = [];
+
         $sql = "SELECT * FROM Users";
-        if($result = $conn->query($sql)){
-            $rowsCount = $result->num_rows; // количество полученных строк
 
-            echo "<table><tr><th>Id</th><th>ФИО</th><th>Почта</th></tr>";
-            foreach($result as $row){
-                echo "<tr>";
-                echo "<td>" . $row["id"] . "</td>";
-                echo "<td>" . $row["fio"] . "</td>";
-                echo "<td>" . $row["mail"] . "</td>";
-                echo "</tr>";
+        if ($data = $this->con->query($sql)) {
+            foreach ($data as $row) {
+                $result[] = $row;
             }
-            echo "</table>";
-            $result->free();
-        } else{
-            echo "Ошибка: " . $conn->error;
+        } else {
+            echo "Ошибка: " . $this->con->error;
         }
-        $conn->close();
+        $this->con->close();
+
+        return $result;
     }
 
     public function insert($fio, $mail)
     {
-        $conn = new mysqli("localhost", "root", "", "bd");
-
-        if($conn->connect_error){
-            die("Ошибка: " . $conn->connect_error);
+        if ($this->con->connect_error) {
+            die("Ошибка: " . $this->con->connect_error);
         }
 
         $sql = "INSERT INTO `users` values (default, '$fio', '$mail')";
 
-        if(empty($fio) || empty($mail))
-        {
-            echo"Empty text box";
-        }
-        else
-        {
-            if($conn->query($sql))
-            {
+        if (empty($fio) || empty($mail)) {
+            echo "Empty text box";
+        } else {
+            if ($this->con->query($sql)) {
                 echo "positive result";
 
-            }
-            else
-            {
-                echo"negative result";
+            } else {
+                echo "negative result";
             }
         }
-        $conn->close();
+        $this->con->close();
     }
 
     public function search($mail)
     {
-        $conn = new mysqli("localhost", "root", "", "bd");
-
-        if($conn->connect_error){
-            die("Ошибка: " . $conn->connect_error);
+        if ($this->con->connect_error) {
+            die("Ошибка: " . $this->con->connect_error);
         }
+
+        $result = [];
+
         $sql = "SELECT * FROM users where mail = $mail ";
-        if($result = $conn->query($sql)){
-            $rowsCount = $result->num_rows; // количество полученных строк
-
-            echo "<table><tr><th>Id</th><th>ФИО</th><th>Почта</th></tr>";
-            foreach($result as $row){
-                echo "<tr>";
-                echo "<td>" . $row["id"] . "</td>";
-                echo "<td>" . $row["fio"] . "</td>";
-                echo "<td>" . $row["mail"] . "</td>";
-                echo "</tr>";
+        if ($data = $this->con->query($sql)) {
+            foreach ($data as $row) {
+                $result[] = $row;
             }
-            echo "</table>";
-            $result->free();
-        } else{
-            echo "Ошибка: " . $conn->error;
+        } else {
+            echo "Ошибка: " . $this->con->error;
         }
-        $conn->close();
+        $this->con->close();
+
+        return $result;
     }
 
 }

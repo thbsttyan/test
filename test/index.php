@@ -1,29 +1,45 @@
 <?php
-include("firstClass.php");
+include("UserService.php");
 
-$conn = new mysqli("localhost", "root", "", "bd");
+$userService= new userService();
+$data = $userService->viewDB();
+?>
 
+<!DOCTYPE html>
+<html>
+<head>
+    <h2>Добавить запись</h2>
+</head>
+<body>
+<form name='Add' action='insert.php' method='post'>
 
+    <p>ФИО
+        <input type=text name=fio size=12>
+    <p/>
 
-echo "<h2>Добавить запись</h2>";
+    <p>Почта
+        <input type=text name=mail size=12>
+    <p/>
 
-echo"<form name='Add' action='insert.php' method='POST'>";
-echo"
-            <P>ФИО
-            <INPUT TYPE=text NAME=fio SIZE=12>
-            <P/>    
+    <input type='submit' value='Добавить'/>
 
-            <P>Почта
-            <INPUT TYPE=text NAME=mail SIZE=12>
-            <P/>
+</form>
 
-            <input type='submit' value='Добавить'/>
-            ";
+<table>
+    <tr>
+        <th>id</th>
+        <th>fio</th>
+        <th>mail</th>
+    </tr>
+    <?php foreach($data as $item) :?>
+    <tr>
+        <td><?php echo $item['id']; ?></td>
+        <td><?php echo $item['fio']; ?></td>
+        <td><?php echo $item['mail']; ?></td>
+    </tr>
+    <?php endforeach; ?>
+</table>
 
-echo"</form>";
-
-$class = new firstClass();
-$class->viewDB();
-
-echo"<a href='search.php'>Поиск по почте</a>";
-
+<a href='search.php'>Поиск по почте</a>
+</body>
+</html>

@@ -1,32 +1,49 @@
 <?php
 
-include("firstClass.php");
+include("UserService.php");
 
-$conn = new mysqli("localhost", "root", "", "bd");
+$userService = new userService();
 
-echo "<h2>Поиск</h2>";
-
-echo"<form name='Add' action='' method='POST'>";
-echo"
-            <P>Введите почту
-            <INPUT TYPE=text NAME=mailSearch SIZE=12>
-            <P/>    
-
-            <input type='submit' value='Поиск'/>
-            ";
-
-echo"</form>";
-
-$class = new firstClass();
-
-if(!empty($_POST['mailSearch'])) {
+if (!empty($_POST['mailSearch'])) {
     $mail = $_POST['mailSearch'];
 
-    $class->search($mail);
+    $data = $userService->search($mail);
+} else {
+    $data = null;
 }
-else{
-    echo"Поле пустое";
-}
+?>
+<!DOCTYPE html>
+<html>
+<head>
+    <h2>Поиск</h2>
+</head>
+<body>
+<form name='Add' action='' method='post'>
 
-echo"<a href='firstFile.php'>Назад</a>";
+    <p>Введите почту
+        <input TYPE=text name=mailSearch size=12>
+    <p/>
 
+    <input type='submit' value='Поиск'/>
+
+</form>
+
+<?php if($data != null) :?>
+<table>
+    <tr>
+        <th>id</th>
+        <th>fio</th>
+        <th>mail</th>
+    </tr>
+    <?php foreach($data as $item) :?>
+    <tr>
+        <td><?php echo $item['id']?></td>
+        <td><?php echo $item['fio']?></td>
+        <td><?php echo $item['mail']?></td>
+    </tr>
+    <?php endforeach ;?>
+</table>
+<?php endif ;?>
+
+<a href='index.php'>Назад</a>
+</body>
